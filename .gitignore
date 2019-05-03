@@ -1,0 +1,6 @@
+.gradle
+.idea
+out
+gradlew
+gradle.bat
+MercadoLibreGalaxyTest.iml
