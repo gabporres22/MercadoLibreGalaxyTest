@@ -5,13 +5,13 @@ import com.gporres.mercadolibre.galaxytest.model.enums.OrbitModeEnum;
 public class Planet {
     private String name;
     private Integer distanceToTheSun;
-    private Integer diaryDegrees;
+    private Integer dailyAdvanceDegrees;
     private OrbitModeEnum orbitMode;
 
-    public Planet(final String name, final Integer distanceToTheSun, final Integer diaryDegrees, final OrbitModeEnum orbitMode) {
+    public Planet(final String name, final Integer distanceToTheSun, final Integer dailyAdvanceDegrees, final OrbitModeEnum orbitMode) {
         this.name = name;
         this.distanceToTheSun = distanceToTheSun;
-        this.diaryDegrees = diaryDegrees;
+        this.dailyAdvanceDegrees = dailyAdvanceDegrees;
         this.orbitMode = orbitMode;
     }
 
@@ -23,8 +23,8 @@ public class Planet {
         return distanceToTheSun;
     }
 
-    public Integer getDiaryDegrees() {
-        return diaryDegrees;
+    public Integer getDailyAdvanceDegrees() {
+        return dailyAdvanceDegrees;
     }
 
     public OrbitModeEnum getOrbitMode() {

@@ -21,7 +21,7 @@ public class WeatherForecast {
     private Double rainPercentage;
 
     @Column(nullable = false)
-    private Double planetTrianglePerimeter;
+    private Double planetsTrianglePerimeter;
 
     public Integer getId() {
         return id;
@@ -31,7 +31,7 @@ public class WeatherForecast {
         return day;
     }
 
-    public void setDay(Integer day) {
+    public void setDay(final Integer day) {
         this.day = day;
     }
 
@@ -39,7 +39,7 @@ public class WeatherForecast {
         return weather;
     }
 
-    public void setWeather(WeatherTypeEnum weather) {
+    public void setWeather(final WeatherTypeEnum weather) {
         this.weather = weather;
     }
 
@@ -47,15 +47,25 @@ public class WeatherForecast {
         return rainPercentage;
     }
 
-    public void setRainPercentage(Double rainPercentage) {
+    public void setRainPercentage(final Double rainPercentage) {
         this.rainPercentage = rainPercentage;
     }
 
-    public Double getPlanetTrianglePerimeter() {
-        return planetTrianglePerimeter;
+    public Double getPlanetsTrianglePerimeter() {
+        return planetsTrianglePerimeter;
     }
 
-    public void setPlanetTrianglePerimeter(Double planetTrianglePerimeter) {
-        this.planetTrianglePerimeter = planetTrianglePerimeter;
+    public void setPlanetsTrianglePerimeter(final Double planetsTrianglePerimeter) {
+        this.planetsTrianglePerimeter = planetsTrianglePerimeter;
+    }
+
+    @Override
+    public String toString() {
+        return "WeatherForecast{" +
+                "day=" + day +
+                ", weather=" + weather +
+                ", rainPercentage=" + rainPercentage +
+                ", planetsTrianglePerimeter=" + planetsTrianglePerimeter +
+                '}';
     }
 }
