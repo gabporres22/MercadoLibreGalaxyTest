@@ -19,9 +19,9 @@ Lluvia Intensa|Cuando el perímetro del triángulo sea el mayor posible y el Sol
 Condiciones óptimas|Cuando los 3 planetas se encuentren alineados entre sí pero no con el Sol.
 
 ### Requisitos
-1 - Determinar cuántos períodos de sequía habrá.
-2 - Determinar cuántos períodos de lluvia habrá y que día será el pico máximo de lluvia.
-3 - Determinar cuántos períodos de condiciones óptimas habrá.
+- Determinar cuántos períodos de sequía habrá.
+- Determinar cuántos períodos de lluvia habrá y que día será el pico máximo de lluvia.
+- Determinar cuántos períodos de condiciones óptimas habrá.
 
 ### Extra
 Realizar y alojar un servicio REST el cuál permite invocar el endpoint api/clima?dia=123 el cuál debe devolver el pronóstico del clima para el día indicado.
