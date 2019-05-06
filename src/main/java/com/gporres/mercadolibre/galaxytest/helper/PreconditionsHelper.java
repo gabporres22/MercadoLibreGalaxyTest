@@ -3,20 +3,19 @@ package com.gporres.mercadolibre.galaxytest.helper;
 import com.google.common.base.Preconditions;
 
 public class PreconditionsHelper {
-    public static void checkNotNull(final Object object) {
-        Preconditions.checkNotNull(object, "[" + Object.class.getName() + "] must be not null");
+    public static String GREATER_THAN_ZERO = "must be greater than or equal to zero.";
+    public static String DIFFERENT_FROM_ZERO = "must be different from zero.";
+
+    public static void checkNotNull(final Object object, final String name) {
+        Preconditions.checkNotNull(object, "[" + name + "] must be not null.");
     }
 
-    public static void checkArgument(final Boolean condition, final String message) {
-        Preconditions.checkArgument(condition, "[" + Object.class.getName() + "] " + message);
+    public static void checkArgument(final Boolean condition, final String name, final String message) {
+        Preconditions.checkArgument(condition, "[" + name + "] " + message);
     }
 
-    public static void checkArgument(final Boolean condition) {
-        Preconditions.checkArgument(condition, "[" + Object.class.getName() + "] must be greater than 0.");
-    }
-
-    public static void checkNotNullAndArgument(final Object object, final Boolean condition) {
-        checkNotNull(object);
-        checkArgument(condition);
+    public static void checkNotNullAndArgument(final Object object, final String name, final Boolean condition, final String message) {
+        checkNotNull(object, name);
+        checkArgument(condition, name, message);
     }
 }

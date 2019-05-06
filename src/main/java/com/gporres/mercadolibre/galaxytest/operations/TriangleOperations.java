@@ -13,7 +13,7 @@ public class TriangleOperations {
     private LineOperations lineOperations;
 
     public Double calculatePerimeter(final Triangle triangle) {
-        PreconditionsHelper.checkNotNull(triangle);
+        PreconditionsHelper.checkNotNull(triangle, "Triangle");
 
         final Double distanceAB = lineOperations.getDistance(new Line(triangle.getPointA(), triangle.getPointB()));
         final Double distanceBC = lineOperations.getDistance(new Line(triangle.getPointB(), triangle.getPointC()));
@@ -23,8 +23,8 @@ public class TriangleOperations {
     }
 
     public Boolean isPointInside(final Triangle triangle, final Coordinates point) {
-        PreconditionsHelper.checkNotNull(triangle);
-        PreconditionsHelper.checkNotNull(point);
+        PreconditionsHelper.checkNotNull(triangle, "Triangle");
+        PreconditionsHelper.checkNotNull(point, "Point");
 
         final Double originalArea = calculateArea(triangle.getPointA(), triangle.getPointB(), triangle.getPointC());
 
@@ -36,9 +36,9 @@ public class TriangleOperations {
     }
 
     private Double calculateArea(final Coordinates pointA, final Coordinates pointB, final Coordinates pointC) {
-        PreconditionsHelper.checkNotNull(pointA);
-        PreconditionsHelper.checkNotNull(pointB);
-        PreconditionsHelper.checkNotNull(pointC);
+        PreconditionsHelper.checkNotNull(pointA, "PointA");
+        PreconditionsHelper.checkNotNull(pointB, "PointB");
+        PreconditionsHelper.checkNotNull(pointC, "PointC");
 
         double tmp = pointA.getX() * (pointB.getY() - pointC.getY()) +
                 pointB.getX() * (pointC.getY() - pointA.getY()) +

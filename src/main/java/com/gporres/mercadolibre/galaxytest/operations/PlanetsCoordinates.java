@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
 
+import static com.gporres.mercadolibre.galaxytest.helper.PreconditionsHelper.GREATER_THAN_ZERO;
+
 @Component
 public class PlanetsCoordinates {
     @Autowired
@@ -21,7 +23,7 @@ public class PlanetsCoordinates {
     private Coordinates betasoideCoordinates;
 
     public void calculatePlanetsCoordinates(final @NotNull Integer day) {
-        PreconditionsHelper.checkNotNullAndArgument(day, day > 0);
+        PreconditionsHelper.checkNotNullAndArgument(day, "Day", day >= 0, GREATER_THAN_ZERO);
 
         ferengiCoordinates = planetOperations.calculateCoordinates(galaxy.getFerengi(), day);
         vulcanoCoordinates = planetOperations.calculateCoordinates(galaxy.getVulcano(), day);

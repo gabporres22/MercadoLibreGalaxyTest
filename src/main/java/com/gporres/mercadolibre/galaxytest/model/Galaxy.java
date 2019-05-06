@@ -16,9 +16,9 @@ public class Galaxy {
     private Planet betasoide;
 
     public Galaxy(final Planet ferengi, final Planet vulcano, final Planet betasoide) {
-        PreconditionsHelper.checkNotNull(ferengi);
-        PreconditionsHelper.checkNotNull(vulcano);
-        PreconditionsHelper.checkNotNull(betasoide);
+        PreconditionsHelper.checkNotNull(ferengi, "Ferengi");
+        PreconditionsHelper.checkNotNull(vulcano, "Vulcano");
+        PreconditionsHelper.checkNotNull(betasoide, "Betasoide");
 
         this.ferengi = ferengi;
         this.vulcano = vulcano;

@@ -14,6 +14,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.gporres.mercadolibre.galaxytest.helper.PreconditionsHelper.GREATER_THAN_ZERO;
+
 @Component
 public class GalaxyOperations {
     @Autowired
@@ -32,15 +34,15 @@ public class GalaxyOperations {
     private TriangleOperations triangleOperations;
 
     public Map<Integer, WeatherTypeEnum> predictWeather(final @NotNull Integer dayFrom, final @NotNull Integer dayTo) {
-        PreconditionsHelper.checkNotNullAndArgument(dayFrom, dayFrom > 0);
-        PreconditionsHelper.checkNotNullAndArgument(dayTo, dayTo > 0);
+        PreconditionsHelper.checkNotNullAndArgument(dayFrom, "DayFrom", dayFrom >= 0, GREATER_THAN_ZERO);
+        PreconditionsHelper.checkNotNullAndArgument(dayTo, "DayTo", dayTo > 0, GREATER_THAN_ZERO);
 
         return IntStream.rangeClosed(dayFrom, dayTo).boxed().collect(
                 Collectors.toMap(Function.identity(), this::predictWeather));
     }
 
     public Double calculatePlanetsTrianglePerimeter(final @NotNull Integer day) {
-        PreconditionsHelper.checkNotNullAndArgument(day, day > 0);
+        PreconditionsHelper.checkNotNullAndArgument(day, "Day",day >= 0, GREATER_THAN_ZERO);
         planetsCoordinates.calculatePlanetsCoordinates(day);
 
         final Line ferengiBetasoideline = new Line(planetsCoordinates.getFerengiCoordinates(), planetsCoordinates.getBetasoideCoordinates());
@@ -54,6 +56,7 @@ public class GalaxyOperations {
     }
 
     private WeatherTypeEnum predictWeather(final Integer day) {
+        PreconditionsHelper.checkNotNullAndArgument(day, "Day", day >= 0, GREATER_THAN_ZERO);
         planetsCoordinates.calculatePlanetsCoordinates(day);
 
         if(checkDryWeather())

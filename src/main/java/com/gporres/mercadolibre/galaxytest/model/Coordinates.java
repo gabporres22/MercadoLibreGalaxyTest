@@ -11,8 +11,8 @@ public class Coordinates {
     }
 
     public Coordinates(final @NotNull Double x, final @NotNull Double y) {
-        PreconditionsHelper.checkNotNullAndArgument(x, x >= 0);
-        PreconditionsHelper.checkNotNullAndArgument(y, y >= 0);
+        PreconditionsHelper.checkNotNull(x, "X");
+        PreconditionsHelper.checkNotNull(y, "Y");
 
         this.x = x;
         this.y = y;

@@ -13,7 +13,7 @@ public class LineOperations {
     private static double PRECISION = 0.01;
 
     private Optional<Double> calculateSlope(final @NotNull Line line) {
-        PreconditionsHelper.checkNotNull(line);
+        PreconditionsHelper.checkNotNull(line, "Line");
 
         final Double deltaX = line.getPointB().getX() - line.getPointA().getX();
 
@@ -26,15 +26,15 @@ public class LineOperations {
     }
 
     private Double getYAxisIntersection(final @NotNull Line line, final @NotNull Double slope) {
-        PreconditionsHelper.checkNotNull(line);
-        PreconditionsHelper.checkNotNull(slope);
+        PreconditionsHelper.checkNotNull(line, "Line");
+        PreconditionsHelper.checkNotNull(slope, "Slope");
 
         return line.getPointA().getY() - slope * line.getPointA().getX();
     }
 
     public boolean isPointInLine(final @NotNull Line line, final @NotNull Coordinates point) {
-        PreconditionsHelper.checkNotNull(line);
-        PreconditionsHelper.checkNotNull(point);
+        PreconditionsHelper.checkNotNull(line, "Line");
+        PreconditionsHelper.checkNotNull(point, "Point");
 
         return calculateSlope(line).map(m -> {
             final Double calculatedY = m * point.getX() + getYAxisIntersection(line, m);
