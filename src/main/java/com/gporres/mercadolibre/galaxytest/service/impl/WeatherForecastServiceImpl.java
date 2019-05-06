@@ -1,14 +1,18 @@
 package com.gporres.mercadolibre.galaxytest.service.impl;
 
+import com.google.common.collect.Lists;
 import com.gporres.mercadolibre.galaxytest.model.entities.WeatherForecast;
 import com.gporres.mercadolibre.galaxytest.model.enums.WeatherTypeEnum;
 import com.gporres.mercadolibre.galaxytest.operations.GalaxyOperations;
 import com.gporres.mercadolibre.galaxytest.repository.WeatherForecastRepository;
+import com.gporres.mercadolibre.galaxytest.rest.dto.Summary;
 import com.gporres.mercadolibre.galaxytest.service.WeatherForecastService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -51,6 +55,28 @@ public class WeatherForecastServiceImpl implements WeatherForecastService {
 
         weatherForecastRepository.saveAll(weatherForecasts);
         updateRainPercentage();
+    }
+
+    @Override
+    public Summary calculateWeatherSummary() {
+        final ArrayList<WeatherForecast> weatherForecasts = Lists.newArrayList(weatherForecastRepository.findAll());
+
+        final LinkedList<WeatherTypeEnum> weatherPeriods = weatherForecasts.stream().map(o -> o.getWeather()).collect(LinkedList<WeatherTypeEnum>::new,
+                (list, elem) -> {
+                    if (list.isEmpty() || !elem.equals(list.getLast()))
+                        list.add(elem);
+                }, LinkedList<WeatherTypeEnum>::addAll);
+
+        final WeatherForecast topByOrderByPlanetsTrianglePerimeterDesc = weatherForecastRepository.findTopByOrderByPlanetsTrianglePerimeterDesc();
+        final Summary summary = new Summary();
+
+        summary.setRainPeriods(weatherPeriods.stream().filter(WeatherTypeEnum.WET::equals).count());
+        summary.setDryPeriods(weatherPeriods.stream().filter(WeatherTypeEnum.DRY::equals).count());
+        summary.setOptimalPeriods(weatherPeriods.stream().filter(WeatherTypeEnum.OPTIMAL_CONDITIONS::equals).count());
+        summary.setUnknowDays(weatherPeriods.stream().filter(WeatherTypeEnum.UNKNOW::equals).count());
+        summary.setMaximumRainingDay(topByOrderByPlanetsTrianglePerimeterDesc.getDay().intValue());
+
+        return summary;
     }
 
     private Double calculatePlanetsTrianglePerimeter(final WeatherTypeEnum weatherTypeEnum, final Integer day) {

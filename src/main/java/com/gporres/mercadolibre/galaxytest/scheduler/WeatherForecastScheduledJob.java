@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import static java.lang.Long.MAX_VALUE;
+
 @Component
 public class WeatherForecastScheduledJob {
     private static final Logger logger = LoggerFactory.getLogger(WeatherForecastScheduledJob.class);
@@ -19,7 +21,7 @@ public class WeatherForecastScheduledJob {
 
     private Boolean isJobAlreadyRunned = false;
 
-    @Scheduled(fixedDelay = 3000, initialDelay = 1000)
+    @Scheduled(fixedDelay = 1000 * 30, initialDelay = MAX_VALUE)
     public void predictWeather() {
         logger.info("Starting WeatherForecastScheduledJob");
 
