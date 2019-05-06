@@ -26,4 +26,5 @@ Condiciones óptimas|Cuando los 3 planetas se encuentren alineados entre sí per
 ### Extra
 Realizar y alojar un servicio REST el cuál permite invocar el endpoint api/clima?dia=123 el cuál debe devolver el pronóstico del clima para el día indicado.
 
+### Extra ++
 Fuera de lo solicitado, creé un endpoint en api/clima/summary el cual devuelve el resultado de los 3 primeros puntos.
