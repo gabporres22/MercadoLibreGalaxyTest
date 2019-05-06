@@ -1,5 +1,6 @@
 package com.gporres.mercadolibre.galaxytest.operations;
 
+import com.gporres.mercadolibre.galaxytest.helper.PreconditionsHelper;
 import com.gporres.mercadolibre.galaxytest.model.Galaxy;
 import com.gporres.mercadolibre.galaxytest.model.enums.WeatherTypeEnum;
 import com.gporres.mercadolibre.galaxytest.operations.geometric.Line;
@@ -7,6 +8,7 @@ import com.gporres.mercadolibre.galaxytest.operations.geometric.Triangle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.NotNull;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -29,12 +31,16 @@ public class GalaxyOperations {
     @Autowired
     private TriangleOperations triangleOperations;
 
-    public Map<Integer, WeatherTypeEnum> predictWeather(final Integer dayFrom, final Integer dayTo) {
+    public Map<Integer, WeatherTypeEnum> predictWeather(final @NotNull Integer dayFrom, final @NotNull Integer dayTo) {
+        PreconditionsHelper.checkNotNullAndArgument(dayFrom, dayFrom > 0);
+        PreconditionsHelper.checkNotNullAndArgument(dayTo, dayTo > 0);
+
         return IntStream.rangeClosed(dayFrom, dayTo).boxed().collect(
                 Collectors.toMap(Function.identity(), this::predictWeather));
     }
 
-    public Double calculatePlanetsTrianglePerimeter(final Integer day) {
+    public Double calculatePlanetsTrianglePerimeter(final @NotNull Integer day) {
+        PreconditionsHelper.checkNotNullAndArgument(day, day > 0);
         planetsCoordinates.calculatePlanetsCoordinates(day);
 
         final Line ferengiBetasoideline = new Line(planetsCoordinates.getFerengiCoordinates(), planetsCoordinates.getBetasoideCoordinates());

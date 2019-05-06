@@ -1,8 +1,11 @@
 package com.gporres.mercadolibre.galaxytest.model;
 
+import com.gporres.mercadolibre.galaxytest.helper.PreconditionsHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Galaxy {
     private static final Logger logger = LoggerFactory.getLogger(Galaxy.class);
 
@@ -12,7 +15,11 @@ public class Galaxy {
     private Planet vulcano;
     private Planet betasoide;
 
-    public Galaxy(Planet ferengi, Planet vulcano, Planet betasoide) {
+    public Galaxy(final Planet ferengi, final Planet vulcano, final Planet betasoide) {
+        PreconditionsHelper.checkNotNull(ferengi);
+        PreconditionsHelper.checkNotNull(vulcano);
+        PreconditionsHelper.checkNotNull(betasoide);
+
         this.ferengi = ferengi;
         this.vulcano = vulcano;
         this.betasoide = betasoide;

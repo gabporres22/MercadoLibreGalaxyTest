@@ -1,5 +1,6 @@
 package com.gporres.mercadolibre.galaxytest.model;
 
+import com.gporres.mercadolibre.galaxytest.helper.PreconditionsHelper;
 import com.gporres.mercadolibre.galaxytest.model.enums.OrbitModeEnum;
 
 public class Planet {
@@ -9,6 +10,11 @@ public class Planet {
     private OrbitModeEnum orbitMode;
 
     public Planet(final String name, final Integer distanceToTheSun, final Integer dailyAdvanceDegrees, final OrbitModeEnum orbitMode) {
+        PreconditionsHelper.checkNotNull(name);
+        PreconditionsHelper.checkNotNullAndArgument(distanceToTheSun, distanceToTheSun > 0);
+        PreconditionsHelper.checkNotNullAndArgument(dailyAdvanceDegrees, dailyAdvanceDegrees > 0);
+        PreconditionsHelper.checkNotNull(orbitMode);
+
         this.name = name;
         this.distanceToTheSun = distanceToTheSun;
         this.dailyAdvanceDegrees = dailyAdvanceDegrees;

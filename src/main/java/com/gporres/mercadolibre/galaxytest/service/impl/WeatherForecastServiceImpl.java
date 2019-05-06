@@ -1,6 +1,7 @@
 package com.gporres.mercadolibre.galaxytest.service.impl;
 
 import com.google.common.collect.Lists;
+import com.gporres.mercadolibre.galaxytest.helper.PreconditionsHelper;
 import com.gporres.mercadolibre.galaxytest.model.entities.WeatherForecast;
 import com.gporres.mercadolibre.galaxytest.model.enums.WeatherTypeEnum;
 import com.gporres.mercadolibre.galaxytest.operations.GalaxyOperations;
@@ -11,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,7 +31,9 @@ public class WeatherForecastServiceImpl implements WeatherForecastService {
     private GalaxyOperations galaxyOperations;
 
     @Override
-    public WeatherForecast findByDay(final Integer day) throws Exception {
+    public WeatherForecast findByDay(final @NotNull Integer day) throws Exception {
+        PreconditionsHelper.checkNotNullAndArgument(day, day > 0);
+
         final Optional<WeatherForecast> weatherForecast = weatherForecastRepository.findByDay(day);
 
         if(!weatherForecast.isPresent()) {
@@ -41,7 +45,10 @@ public class WeatherForecastServiceImpl implements WeatherForecastService {
     }
 
     @Override
-    public void predictAndStoreWeatherForecast(final Integer fromDay, final Integer toDay) {
+    public void predictAndStoreWeatherForecast(final @NotNull Integer fromDay, @NotNull final Integer toDay) {
+        PreconditionsHelper.checkNotNullAndArgument(fromDay, fromDay > 0);
+        PreconditionsHelper.checkNotNullAndArgument(toDay, toDay > 0);
+
         final List<WeatherForecast> weatherForecasts = galaxyOperations.predictWeather(fromDay, toDay).entrySet().stream().map(entry -> {
 
             final WeatherForecast weatherForecast = new WeatherForecast();
@@ -79,7 +86,9 @@ public class WeatherForecastServiceImpl implements WeatherForecastService {
         return summary;
     }
 
-    private Double calculatePlanetsTrianglePerimeter(final WeatherTypeEnum weatherTypeEnum, final Integer day) {
+    private Double calculatePlanetsTrianglePerimeter(final WeatherTypeEnum weatherTypeEnum, final @NotNull Integer day) {
+        PreconditionsHelper.checkNotNullAndArgument(day, day > 0);
+
         if(WET.equals(weatherTypeEnum)) {
             return galaxyOperations.calculatePlanetsTrianglePerimeter(day);
         } else {
@@ -89,8 +98,10 @@ public class WeatherForecastServiceImpl implements WeatherForecastService {
 
     private void updateRainPercentage() {
         final WeatherForecast topRainWeatherForecast = weatherForecastRepository.findTopByOrderByPlanetsTrianglePerimeterDesc();
+        PreconditionsHelper.checkNotNull(topRainWeatherForecast);
 
         final Double maxTrianglePerimeter = topRainWeatherForecast.getPlanetsTrianglePerimeter();
+        PreconditionsHelper.checkArgument(maxTrianglePerimeter == 0, "MaxTrianglePerimeter must be different from zero");
 
         for(final WeatherForecast weatherForecast : weatherForecastRepository.findAllByWeather(WET)) {
             weatherForecast.setRainPercentage((weatherForecast.getPlanetsTrianglePerimeter() * 100) / maxTrianglePerimeter);

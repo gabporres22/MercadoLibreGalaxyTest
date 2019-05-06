@@ -1,9 +1,6 @@
 package com.gporres.mercadolibre.galaxytest.rest;
 
-import com.google.common.collect.Lists;
 import com.gporres.mercadolibre.galaxytest.model.entities.WeatherForecast;
-import com.gporres.mercadolibre.galaxytest.model.enums.WeatherTypeEnum;
-import com.gporres.mercadolibre.galaxytest.repository.WeatherForecastRepository;
 import com.gporres.mercadolibre.galaxytest.rest.dto.Summary;
 import com.gporres.mercadolibre.galaxytest.rest.dto.WeatherForecastDTO;
 import com.gporres.mercadolibre.galaxytest.service.WeatherForecastService;
@@ -13,9 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
 
 @RestController
 @RequestMapping("/api/clima")
