@@ -21,7 +21,7 @@ public class WeatherForecastScheduledJob {
 
     private Boolean isJobAlreadyRunned = false;
 
-    @Scheduled(fixedDelay = 1000 * 30, initialDelay = MAX_VALUE)
+    @Scheduled(fixedDelay = MAX_VALUE, initialDelay = 1000 * 15)
     public void predictWeather() {
         logger.info("Starting WeatherForecastScheduledJob");
 
