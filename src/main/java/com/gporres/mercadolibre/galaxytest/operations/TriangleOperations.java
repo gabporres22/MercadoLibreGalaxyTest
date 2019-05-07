@@ -15,9 +15,9 @@ public class TriangleOperations {
     public Double calculatePerimeter(final Triangle triangle) {
         PreconditionsHelper.checkNotNull(triangle, "Triangle");
 
-        final Double distanceAB = lineOperations.getDistance(new Line(triangle.getPointA(), triangle.getPointB()));
-        final Double distanceBC = lineOperations.getDistance(new Line(triangle.getPointB(), triangle.getPointC()));
-        final Double distanceCA = lineOperations.getDistance(new Line(triangle.getPointC(), triangle.getPointA()));
+        final Double distanceAB = lineOperations.calculateDistance(new Line(triangle.getPointA(), triangle.getPointB()));
+        final Double distanceBC = lineOperations.calculateDistance(new Line(triangle.getPointB(), triangle.getPointC()));
+        final Double distanceCA = lineOperations.calculateDistance(new Line(triangle.getPointC(), triangle.getPointA()));
 
         return distanceAB + distanceBC + distanceCA;
     }

@@ -23,6 +23,8 @@ public class Galaxy {
         this.ferengi = ferengi;
         this.vulcano = vulcano;
         this.betasoide = betasoide;
+
+        logger.info("Galaxy created ! {}", this);
     }
 
     public Coordinates getSunCoordinates() {
@@ -39,5 +41,15 @@ public class Galaxy {
 
     public Planet getBetasoide() {
         return betasoide;
+    }
+
+    @Override
+    public String toString() {
+        return "Galaxy{" +
+                "sunCoordinates=" + sunCoordinates.toString() +
+                ", ferengi=" + ferengi.toString() +
+                ", vulcano=" + vulcano.toString() +
+                ", betasoide=" + betasoide.toString() +
+                '}';
     }
 }

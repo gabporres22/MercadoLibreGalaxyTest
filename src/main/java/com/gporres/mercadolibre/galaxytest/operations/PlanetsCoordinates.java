@@ -3,6 +3,8 @@ package com.gporres.mercadolibre.galaxytest.operations;
 import com.gporres.mercadolibre.galaxytest.helper.PreconditionsHelper;
 import com.gporres.mercadolibre.galaxytest.model.Coordinates;
 import com.gporres.mercadolibre.galaxytest.model.Galaxy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +14,8 @@ import static com.gporres.mercadolibre.galaxytest.helper.PreconditionsHelper.GRE
 
 @Component
 public class PlanetsCoordinates {
+    private static final Logger logger = LoggerFactory.getLogger(PlanetsCoordinates.class);
+
     @Autowired
     private Galaxy galaxy;
 
@@ -24,6 +28,8 @@ public class PlanetsCoordinates {
 
     public void calculatePlanetsCoordinates(final @NotNull Integer day) {
         PreconditionsHelper.checkNotNullAndArgument(day, "Day", day >= 0, GREATER_THAN_ZERO);
+
+        logger.debug("Calculate planets coordinates at day {}", day);
 
         ferengiCoordinates = planetOperations.calculateCoordinates(galaxy.getFerengi(), day);
         vulcanoCoordinates = planetOperations.calculateCoordinates(galaxy.getVulcano(), day);

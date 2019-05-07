@@ -5,6 +5,8 @@ import com.gporres.mercadolibre.galaxytest.model.Galaxy;
 import com.gporres.mercadolibre.galaxytest.model.enums.WeatherTypeEnum;
 import com.gporres.mercadolibre.galaxytest.operations.geometric.Line;
 import com.gporres.mercadolibre.galaxytest.operations.geometric.Triangle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,10 +16,13 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.gporres.mercadolibre.galaxytest.helper.PreconditionsHelper.GREATER_THAN_FIRST_PARAM;
 import static com.gporres.mercadolibre.galaxytest.helper.PreconditionsHelper.GREATER_THAN_ZERO;
 
 @Component
 public class GalaxyOperations {
+    private static final Logger logger = LoggerFactory.getLogger(GalaxyOperations.class);
+
     @Autowired
     private PlanetOperations planetOperations;
 
@@ -36,6 +41,9 @@ public class GalaxyOperations {
     public Map<Integer, WeatherTypeEnum> predictWeather(final @NotNull Integer dayFrom, final @NotNull Integer dayTo) {
         PreconditionsHelper.checkNotNullAndArgument(dayFrom, "DayFrom", dayFrom >= 0, GREATER_THAN_ZERO);
         PreconditionsHelper.checkNotNullAndArgument(dayTo, "DayTo", dayTo > 0, GREATER_THAN_ZERO);
+        PreconditionsHelper.checkArgument(dayTo > dayFrom, "dayTo-dayFrom", GREATER_THAN_FIRST_PARAM);
+
+        logger.debug("Predict Weather Range [{} - {}]", dayFrom, dayTo);
 
         return IntStream.rangeClosed(dayFrom, dayTo).boxed().collect(
                 Collectors.toMap(Function.identity(), this::predictWeather));
@@ -43,6 +51,7 @@ public class GalaxyOperations {
 
     public Double calculatePlanetsTrianglePerimeter(final @NotNull Integer day) {
         PreconditionsHelper.checkNotNullAndArgument(day, "Day",day >= 0, GREATER_THAN_ZERO);
+        logger.debug("Planets Triangle Perimeter for day {}", day);
         planetsCoordinates.calculatePlanetsCoordinates(day);
 
         final Line ferengiBetasoideline = new Line(planetsCoordinates.getFerengiCoordinates(), planetsCoordinates.getBetasoideCoordinates());
@@ -55,10 +64,19 @@ public class GalaxyOperations {
         return triangleOperations.calculatePerimeter(triangle);
     }
 
-    private WeatherTypeEnum predictWeather(final Integer day) {
+    private WeatherTypeEnum predictWeather(final @NotNull Integer day) {
         PreconditionsHelper.checkNotNullAndArgument(day, "Day", day >= 0, GREATER_THAN_ZERO);
+
         planetsCoordinates.calculatePlanetsCoordinates(day);
 
+        final WeatherTypeEnum weatherTypeEnum = checkWeather();
+
+        logger.info("Predicted weather forecast at day {} => {}", day, weatherTypeEnum.name());
+
+        return weatherTypeEnum;
+    }
+
+    private WeatherTypeEnum checkWeather() {
         if(checkDryWeather())
             return WeatherTypeEnum.DRY;
 

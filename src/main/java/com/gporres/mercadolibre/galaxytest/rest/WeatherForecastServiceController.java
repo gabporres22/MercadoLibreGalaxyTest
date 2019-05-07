@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/clima")
 public class WeatherForecastServiceController {
@@ -21,13 +23,18 @@ public class WeatherForecastServiceController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<WeatherForecastDTO> findWeatherForecastByDay(@RequestParam("dia") Integer day) throws Exception {
-        final WeatherForecast weatherForecast = weatherForecastService.findByDay(day);
+        logger.debug("[findWeatherForecastByDay] - Find forecast for {}", day);
+        final Optional<WeatherForecast> weatherForecast = weatherForecastService.findByDay(day);
 
-        return new ResponseEntity<>(new WeatherForecastDTO(weatherForecast), HttpStatus.OK);
+        if(!weatherForecast.isPresent())
+            return ResponseEntity.notFound().build();
+
+        return new ResponseEntity<>(new WeatherForecastDTO(weatherForecast.get()), HttpStatus.OK);
     }
 
     @RequestMapping(value="/summary", method = RequestMethod.GET)
     public ResponseEntity<Summary> calculateSummary() {
+        logger.debug("[calculateSummary] - Calculate Summary");
         final Summary summary = weatherForecastService.calculateWeatherSummary();
 
         return new ResponseEntity<>(summary, HttpStatus.OK);

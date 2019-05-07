@@ -3,6 +3,7 @@ package com.gporres.mercadolibre.galaxytest.helper;
 import com.google.common.base.Preconditions;
 
 public class PreconditionsHelper {
+    public static String GREATER_THAN_FIRST_PARAM = "must be greather than first parameter";
     public static String GREATER_THAN_ZERO = "must be greater than or equal to zero.";
     public static String DIFFERENT_FROM_ZERO = "must be different from zero.";
 

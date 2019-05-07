@@ -3,9 +3,11 @@ package com.gporres.mercadolibre.galaxytest.service;
 import com.gporres.mercadolibre.galaxytest.model.entities.WeatherForecast;
 import com.gporres.mercadolibre.galaxytest.rest.dto.Summary;
 
+import java.util.Optional;
+
 public interface WeatherForecastService {
 
-    WeatherForecast findByDay(final Integer day) throws Exception;
+    Optional<WeatherForecast> findByDay(final Integer day);
 
     Summary calculateWeatherSummary();
 

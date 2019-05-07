@@ -20,6 +20,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.gporres.mercadolibre.galaxytest.helper.PreconditionsHelper.DIFFERENT_FROM_ZERO;
+import static com.gporres.mercadolibre.galaxytest.helper.PreconditionsHelper.GREATER_THAN_FIRST_PARAM;
 import static com.gporres.mercadolibre.galaxytest.helper.PreconditionsHelper.GREATER_THAN_ZERO;
 import static com.gporres.mercadolibre.galaxytest.model.enums.WeatherTypeEnum.WET;
 
@@ -33,23 +34,28 @@ public class WeatherForecastServiceImpl implements WeatherForecastService {
     private GalaxyOperations galaxyOperations;
 
     @Override
-    public WeatherForecast findByDay(final @NotNull Integer day) throws Exception {
+    public Optional<WeatherForecast> findByDay(final @NotNull Integer day) {
         PreconditionsHelper.checkNotNullAndArgument(day, "Day", day >= 0, GREATER_THAN_ZERO);
+
+        logger.debug("Find Weather at day {}", day);
 
         final Optional<WeatherForecast> weatherForecast = weatherForecastRepository.findByDay(day);
 
         if(!weatherForecast.isPresent()) {
-            logger.debug("Prediction for day %s not found.", day);
-            throw new Exception("Prediction for day " + day + " not found.");
+            logger.debug("Prediction for day {} not found.", day);
+            return Optional.empty();
         }
 
-        return weatherForecast.get();
+        return weatherForecast;
     }
 
     @Override
     public void predictAndStoreWeatherForecast(final @NotNull Integer fromDay, @NotNull final Integer toDay) {
         PreconditionsHelper.checkNotNullAndArgument(fromDay, "FromDay",fromDay >= 0, GREATER_THAN_ZERO);
         PreconditionsHelper.checkNotNullAndArgument(toDay, "ToDay",toDay > 0, GREATER_THAN_ZERO);
+        PreconditionsHelper.checkArgument(toDay > fromDay, "toDay-fromDay", GREATER_THAN_FIRST_PARAM);
+
+        logger.debug("PredictAndStoreWeatherForecast by range {} - {}", fromDay, toDay);
 
         final List<WeatherForecast> weatherForecasts = galaxyOperations.predictWeather(fromDay, toDay).entrySet().stream().map(entry -> {
 
@@ -62,6 +68,8 @@ public class WeatherForecastServiceImpl implements WeatherForecastService {
             return weatherForecast;
         }).collect(Collectors.toList());
 
+        logger.debug("Saving {} entities", weatherForecasts.size());
+
         weatherForecastRepository.saveAll(weatherForecasts);
         updateRainPercentage();
     }
@@ -72,9 +80,8 @@ public class WeatherForecastServiceImpl implements WeatherForecastService {
 
         final LinkedList<WeatherTypeEnum> weatherPeriods = weatherForecasts.stream().map(o -> o.getWeather()).collect(LinkedList<WeatherTypeEnum>::new,
                 (list, elem) -> {
-                    if (list.isEmpty() || !elem.equals(list.getLast()))
-                        list.add(elem);
-                }, LinkedList<WeatherTypeEnum>::addAll);
+                    if (list.isEmpty() || !elem.equals(list.getLast())) list.add(elem);
+                }, LinkedList::addAll);
 
         final WeatherForecast topByOrderByPlanetsTrianglePerimeterDesc = weatherForecastRepository.findTopByOrderByPlanetsTrianglePerimeterDesc();
         final Summary summary = new Summary();
@@ -101,6 +108,8 @@ public class WeatherForecastServiceImpl implements WeatherForecastService {
     private void updateRainPercentage() {
         final WeatherForecast topRainWeatherForecast = weatherForecastRepository.findTopByOrderByPlanetsTrianglePerimeterDesc();
         PreconditionsHelper.checkNotNull(topRainWeatherForecast, "TopRainWeatherForecast");
+
+        logger.debug("Update rain percentage by maximum day {}", topRainWeatherForecast.getDay());
 
         final Double maxTrianglePerimeter = topRainWeatherForecast.getPlanetsTrianglePerimeter();
         PreconditionsHelper.checkArgument(maxTrianglePerimeter != 0, "maxTrianglePerimeter", DIFFERENT_FROM_ZERO);

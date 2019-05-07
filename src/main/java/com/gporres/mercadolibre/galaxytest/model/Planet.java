@@ -2,10 +2,14 @@ package com.gporres.mercadolibre.galaxytest.model;
 
 import com.gporres.mercadolibre.galaxytest.helper.PreconditionsHelper;
 import com.gporres.mercadolibre.galaxytest.model.enums.OrbitModeEnum;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.gporres.mercadolibre.galaxytest.helper.PreconditionsHelper.GREATER_THAN_ZERO;
 
 public class Planet {
+    private static final Logger logger = LoggerFactory.getLogger(Planet.class);
+
     private String name;
     private Integer distanceToTheSun;
     private Integer dailyAdvanceDegrees;
@@ -21,6 +25,8 @@ public class Planet {
         this.distanceToTheSun = distanceToTheSun;
         this.dailyAdvanceDegrees = dailyAdvanceDegrees;
         this.orbitMode = orbitMode;
+
+        logger.debug("Planet {} created.", this.name);
     }
 
     public String getName() {
@@ -37,5 +43,15 @@ public class Planet {
 
     public OrbitModeEnum getOrbitMode() {
         return orbitMode;
+    }
+
+    @Override
+    public String toString() {
+        return "Planet{" +
+                "name='" + name + '\'' +
+                ", distanceToTheSun=" + distanceToTheSun +
+                ", dailyAdvanceDegrees=" + dailyAdvanceDegrees +
+                ", orbitMode=" + orbitMode +
+                '}';
     }
 }
